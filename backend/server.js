@@ -5,10 +5,20 @@ const routes = require('./src/routes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
+const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:3000')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
 app.use(express.json());
 app.use(cors({
-  origin: 'http://localhost:3000',
+  origin: (origin, callback) => {
+    // Allow server-to-server tools (no Origin header) and configured browser origins.
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'));
+  },
   credentials: true
 }));
 
