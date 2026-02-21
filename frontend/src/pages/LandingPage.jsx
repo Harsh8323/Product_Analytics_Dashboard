@@ -30,9 +30,6 @@ const LandingPage = () => {
               <span className="material-symbols-outlined transition-transform group-hover:translate-x-1">arrow_forward</span>
             </button>
           </Link>
-          <button className="flex items-center justify-center h-14 px-8 rounded-xl text-slate-300 hover:text-white hover:bg-white/5 transition-all font-semibold">
-            Watch Demo
-          </button>
         </div>
       </section>
       <Footer />

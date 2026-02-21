@@ -154,6 +154,28 @@ input[type="number"]::-webkit-inner-spin-button {
   margin: 0;
 }
 
+/* Style date inputs so the calendar icon sits at the far right */
+input[type="date"] {
+  position: relative;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.7);
+  cursor: pointer;
+  position: absolute;
+  right: 0.75rem;
+  padding: 0;
+  margin: 0;
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
 /* Ensure all borders use chubby radius */
 .rounded-chubby {
   border-radius: var(--radius) !important;

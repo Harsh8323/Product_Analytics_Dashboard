@@ -12,13 +12,13 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[90%] max-w-6xl z-50">
+    <nav className="fixed top-6 left-1/2 -translate-x-1/2 w-[calc(100%-2rem)] md:w-[calc(100%-4rem)] max-w-7xl z-50">
       <div className="glass flex items-center justify-between px-6 py-3 rounded-chubby">
         <Link to="/" className="flex items-center gap-2 group cursor-pointer">
           <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-primary/20 text-primary">
             <span className="material-symbols-outlined text-xl">analytics</span>
           </div>
-          <span className="text-xl font-bold tracking-tight text-white">Analytics Corp.</span>
+          <span className="text-sm sm:text-base md:text-xl font-bold tracking-tight text-white">Analytics Corp.</span>
         </Link>
         <div className="flex items-center gap-4">
           {user ? (
