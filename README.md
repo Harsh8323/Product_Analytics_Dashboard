@@ -2,6 +2,10 @@
 
 A full-stack product analytics dashboard that visualizes its own usage. Every user interaction (filter change, chart click) is tracked and fed back into the visualization.
 
+## Live Demo
+
+**Deployment Link:** [https://product-analytics-db.vercel.app/](https://product-analytics-db.vercel.app/)
+
 ## Tech Stack
 
 | Layer    | Technology                                        |
@@ -104,4 +108,12 @@ After seeding, the dashboard will display meaningful charts immediately.
 
 ## Scaling to 1 Million Write-Events Per Minute
 
-If this dashboard needed to handle 1 million write-events per minute, the single-Express-server-to-PostgreSQL architecture would not suffice. I would introduce a message queue (e.g., Apache Kafka or Amazon SQS) between the API layer and the database so that incoming `POST /track` requests are acknowledged immediately and events are buffered in the queue. A pool of consumer workers would batch-insert events into the database in bulk (e.g., 1,000 rows per INSERT), dramatically reducing per-row overhead. The database itself would be partitioned by timestamp (e.g., daily partitions) to keep write and query performance stable as data grows. For the read path (analytics aggregations), I would layer a time-series-optimized store such as TimescaleDB or pre-compute rollups into a materialized-view table refreshed on a schedule, so that dashboard queries hit pre-aggregated data instead of scanning raw events. Horizontally, the API layer would run behind a load balancer with auto-scaling, and the database would use read replicas for analytics queries to isolate read traffic from write traffic.
+Right now every click directly inserts a row into PostgreSQL. That works for a small number of users but would break at 1 million writes per minute. Here's what I'd change:
+
+- Add a message queue (like Redis) between the API and the database. The API just pushes the event to the queue and responds instantly, so the user isn't waiting for a DB write.
+- A separate worker process reads from the queue and batch inserts rows (500 or 1000 at a time) instead of inserting one by one. This massively reduces the load on PostgreSQL.
+- Run multiple instances of the API server behind a load balancer (like Nginx) so that no single server is handling all the traffic.
+- Add an index on the `timestamp` column in `feature_clicks` since almost every analytics query filters by date range.
+- As the table grows into millions of rows, partition `feature_clicks` by month so queries only scan the relevant chunk of data.
+
+Honestly,I haven't built anything at this scale personally, but from what I've studied these would be the most impactful changes.

@@ -4,7 +4,6 @@ import { usePersistedFilters } from '../hooks/usePersistedFilters';
 import { getBarChartData, getLineChartData } from '../services/analyticsService';
 import { trackClick } from '../services/trackService';
 import Navbar from '../components/layout/Navbar';
-import Footer from '../components/layout/Footer';
 import Card from '../components/ui/Card';
 import Select from '../components/ui/Select';
 import Input from '../components/ui/Input';
